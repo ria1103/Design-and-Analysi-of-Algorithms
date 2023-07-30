@@ -1,0 +1,99 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct knapsack{
+    float weight,profit;
+    int obj;
+    float ratio,selected;
+}ks[20],temp;
+void GreedyKnapsack(int m,int n)
+{
+    int i,totcap;
+    float frac,sum=0.0,rem,final;
+    totcap=m;
+    for(i=0;i<n;i++)
+    {
+   	 ks[i].selected=0.0;
+    }
+    for(int i=0;i<n;i++)
+    {
+   	 ks[i].ratio=(ks[i].profit/ks[i].weight);
+    }
+    for(int i=0;i<n-1;i++)
+   	 {
+   	 for(int j=i+1;j<n;j++)
+   	 {
+   	 	if(ks[i].ratio<ks[j].ratio)
+   	 	{
+   	     	temp=ks[i];
+   	     	ks[i]=ks[j];
+   	     	ks[j]=temp;
+   	 	}
+   	 }
+  	 }
+    for(i=0;i<n;i++)
+    {    
+   	 if(sum<m)
+   	 {
+   		 sum+=ks[i].weight;
+   		 ks[i].selected=1.0;
+   		 final+=ks[i].profit;
+   	 }
+   	 else
+   	 {
+   		 sum-=ks[i-1].weight;
+   		 final-=ks[i-1].profit;
+   		 rem=totcap-sum;
+   		 frac=rem/(float)(ks[i-1].weight);   	 
+   		 ks[i-1].selected=(float)frac;
+   		 sum+=(frac*(float)ks[i-1].weight);
+   		 final+=(frac*(float)ks[i-1].profit);
+   	 }
+    }
+    printf("\nTotal profit = %.2f\n",final);
+}
+void print(int n)
+{
+    int i;
+    for(int i=0;i<n-1;i++)
+   	 {
+   	 for(int j=i+1;j<n;j++)
+   	 {
+   	 	if(ks[i].obj>ks[j].obj)
+   	 	{
+   	     	temp=ks[i];
+   	     	ks[i]=ks[j];
+   	     	ks[j]=temp;
+   	 	}
+   	 }
+  	 }
+    printf("``FRACTIONAL KNAPSACK PROBLEM``\n");
+    printf("Object\tWeight\tProfit\tRatio\tSelected\n");
+    for(i=0;i<n;i++)
+    {
+   	 printf("%d\t",ks[i].obj);
+   	 printf("%.1f\t",ks[i].weight);
+   	 printf("%.1f\t",ks[i].profit);
+   	 printf("%.1f\t",ks[i].ratio);
+   	 printf("%.1f\t\n",ks[i].selected);
+    }
+}
+
+void main()
+{
+    int m,n;
+    printf("Enter number of objects: ");
+    scanf("%d",&n);
+    printf("Enter capacity: ");
+    scanf("%d",&m);
+    for(int i=0;i<n;i++)
+    {
+   	 printf("Enter object number: ");
+   	 scanf("%d",&ks[i].obj);
+   	 printf("Enter weight of the object: ");
+   	 scanf("%f",&ks[i].weight);
+   	 printf("Enter profit of the object: ");
+   	 scanf("%f",&ks[i].profit);
+    }
+    GreedyKnapsack(m,n);
+    print(n);
+}
