@@ -1,0 +1,73 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#define size 100000000
+int s[size];
+
+int delete(int s[],int pos,int num)
+{
+int element;
+element=s[pos-1];
+for(int i=pos-1;i<num-1;i++)
+{
+s[i]=s[i+1];
+}
+printf("\nelement deleted is %d",element);
+return element;
+}
+
+void nextlargest(int s[],int num,int element)
+{
+int l;
+l=s[0];
+for(int i=0;i<num-1;i++)
+{
+if(s[i]>l)
+{
+l=s[i];
+}
+}
+for(int i=0;i<num-1;i++)
+{
+if(element>l)
+printf("\nNext larger element does not exist!\n");
+else
+{
+for(i=0;i<num-1;i++)
+{
+if(s[i]>element&&s[i]<=l)
+l=s[i];
+}
+printf("\nThe next largest element: %d\n",l);
+}
+}
+}
+void main()
+{
+int i,pos,num,del;
+clock_t startTime1, endTime1,startTime2, endTime2;
+double timeElapsed1,timeElapsed2;
+
+printf("Enter number of elements in an array: ");
+scanf("%d",&num);
+printf("The array: \n");
+for(int i=0;i<num;i++)
+{
+s[i]=rand()%1000;
+printf("%d\t",s[i]);
+}
+printf("\nEnter position of element to be removed:");
+scanf("%d",&pos);
+//delete an element
+startTime1 = clock();
+del=delete(s,pos,num);
+endTime1 = clock();
+timeElapsed1 = (double)(endTime1 - startTime1)/CLOCKS_PER_SEC;
+printf("\nThe time taken for deletion is: %.15lfs\n",timeElapsed1);
+//next largest
+startTime2 = clock();
+nextlargest(s,num,del);
+endTime2 = clock();
+timeElapsed2 = (double)(endTime2 - startTime2)/CLOCKS_PER_SEC;
+printf("\nThe time taken for next largest element is: %.15lfs\n",timeElapsed2);
+}
